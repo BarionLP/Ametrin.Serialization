@@ -25,18 +25,18 @@ public static class JsonExtensions {
         await stream.DisposeAsync();
     }
 
-    public static T? ReadFromJsonFile<T>(string path) {
+    public static T? ReadFromJsonFile<T>(string path, JsonSerializerOptions? options = null) {
         string json = File.ReadAllText(path);
-        return JsonSerializer.Deserialize<T>(json);
+        return JsonSerializer.Deserialize<T>(json, options ?? DefaultOptions);
     }
 
-    public static async Task<T?> ReadFromJsonFileAsync<T>(string path) {
+    public static async Task<T?> ReadFromJsonFileAsync<T>(string path, JsonSerializerOptions? options = null) {
         using FileStream stream = File.OpenRead(path);
-        return await JsonSerializer.DeserializeAsync<T>(stream);
+        return await JsonSerializer.DeserializeAsync<T>(stream, options ?? DefaultOptions);
     }
 
     public static void WriteToJsonFile<T>(this T data, FileInfo fileInfo, JsonSerializerOptions? options = null) => data.WriteToJsonFile(fileInfo.FullName, options);
     public static Task WriteToJsonFileAsync<T>(this T data, FileInfo fileInfo, JsonSerializerOptions? options = null) => data.WriteToJsonFileAsync(fileInfo.FullName, options);
-    public static T? ReadFromJsonFile<T>(FileInfo fileInfo) => ReadFromJsonFile<T>(fileInfo.FullName);
-    public static Task<T?> ReadFromJsonFileAsync<T>(FileInfo fileInfo) => ReadFromJsonFileAsync<T>(fileInfo.FullName);
+    public static T? ReadFromJsonFile<T>(FileInfo fileInfo, JsonSerializerOptions? options = null) => ReadFromJsonFile<T>(fileInfo.FullName, options);
+    public static Task<T?> ReadFromJsonFileAsync<T>(FileInfo fileInfo, JsonSerializerOptions? options = null) => ReadFromJsonFileAsync<T>(fileInfo.FullName, options);
 }
