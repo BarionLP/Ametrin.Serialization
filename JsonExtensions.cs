@@ -1,4 +1,4 @@
-﻿using Ametrin.Utils;
+﻿using Ametrin.Utils.Optional;
 using System.Text.Json;
 
 namespace Ametrin.Serialization;
@@ -21,11 +21,11 @@ public static class JsonExtensions {
     }
     public static Task WriteToJsonFileAsync<T>(this T data, string path, JsonSerializerOptions? options = null) => Task.Run(() => data.WriteToJsonFile(path, options));
 
-    public static Result<T> ReadFromJsonFile<T>(string path, JsonSerializerOptions? options = null) {
+    public static Option<T> ReadFromJsonFile<T>(string path, JsonSerializerOptions? options = null) {
         string json = File.ReadAllText(path);
         return JsonSerializer.Deserialize<T>(json, options ?? DefaultOptions);
     }
-    public static Task<Result<T>> ReadFromJsonFileAsync<T>(string path, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(path, options));
+    public static Task<Option<T>> ReadFromJsonFileAsync<T>(string path, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(path, options));
 
     public static void WriteToJsonFile<T>(this T data, FileInfo fileInfo, JsonSerializerOptions? options = null){
         using var stream = fileInfo.Create();
@@ -33,9 +33,9 @@ public static class JsonExtensions {
     }
     public static Task WriteToJsonFileAsync<T>(this T data, FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => data.WriteToJsonFile(fileInfo, options));
 
-    public static Result<T> ReadFromJsonFile<T>(FileInfo fileInfo, JsonSerializerOptions? options = null){
+    public static Option<T> ReadFromJsonFile<T>(FileInfo fileInfo, JsonSerializerOptions? options = null){
         using var stream = fileInfo.OpenRead();
         return JsonSerializer.Deserialize<T>(stream, options ?? DefaultOptions);
     }
-    public static Task<Result<T>> ReadFromJsonFileAsync<T>(FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(fileInfo, options));
+    public static Task<Option<T>> ReadFromJsonFileAsync<T>(FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(fileInfo, options));
 }
