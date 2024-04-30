@@ -34,6 +34,10 @@ public static class JsonExtensions {
     public static Task WriteToJsonFileAsync<T>(this T data, FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => data.WriteToJsonFile(fileInfo, options));
 
     public static Option<T> ReadFromJsonFile<T>(FileInfo fileInfo, JsonSerializerOptions? options = null){
+        if(!fileInfo.Exists) {
+            return Option<T>.None();
+        }
+
         using var stream = fileInfo.OpenRead();
         return JsonSerializer.Deserialize<T>(stream, options ?? DefaultOptions);
     }
