@@ -19,6 +19,9 @@ public static class JsonExtensions {
     public static void WriteToJsonFile<T>(this T data, string path, JsonSerializerOptions? options = null) {
         File.WriteAllText(path, data.ConvertToJson(options ?? DefaultOptions));
     }
+    public static void WriteToStream<T>(this T data, Stream stream, JsonSerializerOptions? options = null) {
+        JsonSerializer.Serialize(stream, data, options ?? DefaultOptions);
+    }
     public static Task WriteToJsonFileAsync<T>(this T data, string path, JsonSerializerOptions? options = null) => Task.Run(() => data.WriteToJsonFile(path, options));
 
     public static Option<T> ReadFromJsonFile<T>(string path, JsonSerializerOptions? options = null) {
@@ -38,8 +41,8 @@ public static class JsonExtensions {
             return Option<T>.None();
         }
 
-        using var stream = fileInfo.OpenRead();
-        return JsonSerializer.Deserialize<T>(stream, options ?? DefaultOptions);
+        return Deserialize<T>(fileInfo.OpenRead(), options ?? DefaultOptions);
     }
+    public static Option<T> Deserialize<T>(Stream stream, JsonSerializerOptions? options = null) => JsonSerializer.Deserialize<T>(stream, options ?? DefaultOptions);
     public static Task<Option<T>> ReadFromJsonFileAsync<T>(FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(fileInfo, options));
 }
