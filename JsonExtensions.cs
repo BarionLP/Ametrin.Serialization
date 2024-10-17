@@ -1,5 +1,4 @@
-﻿using Ametrin.Utils.Optional;
-using System.Text.Json;
+﻿using System.Threading.Tasks;
 
 namespace Ametrin.Serialization;
 
@@ -45,9 +44,9 @@ public static class JsonExtensions
 
     public static Option<T> ReadFromJsonFile<T>(FileInfo fileInfo, JsonSerializerOptions? options = null)
     {
-        if(!fileInfo.Exists)
+        if (!fileInfo.Exists)
         {
-            return Option<T>.None();
+            return default;
         }
         using var stream = fileInfo.OpenRead();
         return Deserialize<T>(stream, options ?? DefaultOptions);
