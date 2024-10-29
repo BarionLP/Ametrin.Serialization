@@ -42,7 +42,7 @@ public static class JsonExtensions
     }
     public static Task WriteToJsonFileAsync<T>(this T data, FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => data.WriteToJsonFile(fileInfo, options));
 
-    public static Option<T> ReadFromJsonFile<T>(FileInfo fileInfo, JsonSerializerOptions? options = null)
+    public static Option<T> ReadFromJsonFile<T>(this FileInfo fileInfo, JsonSerializerOptions? options = null)
     {
         if (!fileInfo.Exists)
         {
@@ -52,5 +52,5 @@ public static class JsonExtensions
         return Deserialize<T>(stream, options ?? DefaultOptions);
     }
     public static Option<T> Deserialize<T>(Stream stream, JsonSerializerOptions? options = null) => JsonSerializer.Deserialize<T>(stream, options ?? DefaultOptions);
-    public static Task<Option<T>> ReadFromJsonFileAsync<T>(FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(fileInfo, options));
+    public static Task<Option<T>> ReadFromJsonFileAsync<T>(this FileInfo fileInfo, JsonSerializerOptions? options = null) => Task.Run(() => ReadFromJsonFile<T>(fileInfo, options));
 }
