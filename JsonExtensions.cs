@@ -20,9 +20,9 @@ public static class JsonExtensions
 
     public static void WriteToJsonFile<T>(this T data, string path, JsonSerializerOptions? options = null)
     {
-        File.WriteAllText(path, data.ConvertToJson(options ?? DefaultOptions));
+        File.WriteAllText(path, data.ConvertToJson(options));
     }
-    public static void WriteToStream<T>(this T data, Stream stream, JsonSerializerOptions? options = null)
+    public static void WriteToStreamAsJson<T>(this T data, Stream stream, JsonSerializerOptions? options = null)
     {
         JsonSerializer.Serialize(stream, data, options ?? DefaultOptions);
     }
